@@ -1,7 +1,7 @@
-var NUM_BALLS = 8; // num of balls for selection, it must be in range of CODE_LENGTH..8
-var CODE_LENGTH = 5; // set this number in the range of 1..5
-var NUM_ATTEMPTS = 8; // change this number to have less or more attempts in range of 1..8
-var MAX_NUM_ATTEMPTS = 8; // do not change this number
+var NUM_BALLS = 8; 
+var CODE_LENGTH = 5; 
+var NUM_ATTEMPTS = 8; 
+var MAX_NUM_ATTEMPTS = 8; 
 
 var peg_selected = 0;
 var attempt_code;
@@ -9,15 +9,14 @@ var current_attempt_id;
 var start = new Date();
 var btn_initial_top;
 var url = "http://indigo.eecs.yorku.ca:3000/post";
-    //next lab, when you are in Part2 of the project (server side coding), you
-	//should comeback here and change the url to localhost.
+    
 var myName;
 
 window.onload = function()
 {
     createGameBoard(); //draw the game board
     
-    //read CSS to define the button initial position
+   
     var step = parseInt($(".attempt").css("margin-top")) 
                 + parseInt($(".attempt").css("height"));
     var attemptHeight = parseInt($(".attempt").css("height"));
@@ -39,16 +38,9 @@ window.onload = function()
     
 }
 
-/* 
- * Create the game board, includes 
- * one line to display the code images - "coderow"
- * 8 attempts
- * 1 accept button
- * 8 peg selections
- */
+
 function createGameBoard(){
-    
-    //add code images (dummy code)
+   
     for (var i = 1; i <= CODE_LENGTH; i++){
         var newImg = document.createElement("img");
         $(newImg).attr("id", "code" + i);
@@ -62,84 +54,62 @@ function createGameBoard(){
         
 		//for each attempt, we create a div
         var newDiv = document.createElement("div");
-        // set its id and class. Hint: to set its class, you can write: $(newDiv).attr("class", "attempt");4
+        
         $(newDiv).attr("class", "attempt");
         $(newDiv).attr("id", "attempt" + i);
-		//...
-        //...
-        
-		// create a span, and set its id and class
+		
         var newSpan = document.createElement("span");
         $(newSpan).attr("class", "futureattempt");
         $(newSpan).attr("id", "attempt" + i + "pegs");
 
-        //...
-        //...
-		// then add 5 images including ids and classes. The img source could be empty or could be the hole.png
+        
         for (var j = 1; j <= CODE_LENGTH; j++){
             var newImg = document.createElement("img");
             $(newImg).attr("id", "attempt" + i + "_" + j);
             $(newImg).attr("class", "imgAttempt");
             //add a dummy image
             $(newImg).attr("src", "./images/hole.png");
-			//...
-			//...
-			//...
-			//...
+			
             $(newSpan).append(newImg);
         }
 		//append the span to the div
         $(newDiv).append(newSpan);
         
-        // create a new span for displaying result of the end-user attempt, set id and append it to the div
+       
         var newSpan2 = document.createElement("span");
         $(newSpan2).attr("id", "attempt" + i + "result");
         $(newDiv).append(newSpan2);
-		//...
-		//...
-		//...
-
-		// append each div to the game board		
+			
 		$("#gameboard").append(newDiv);
     }
    
-    //add Accept button inside a <div>
+    
     var newDiv = document.createElement("div");
     $(newDiv).attr("id", "acceptcode");
     var newInput = document.createElement("input");
     $(newInput).attr("type", "button");
     $(newInput).attr("name", "Accept");
     $(newInput).attr("value", "Accept");
-    $(newInput).click(process_attempt); // set onclick event handler
+    $(newInput).click(process_attempt); //onclick event handler
     $(newDiv).append(newInput);
-    // add this button div to the game board
+    
     $("#gameboard").append(newDiv);
 
-    // add peg selection	
-	// create 8 img elements and 
-	// show each of the 8 marbles images with shadow from the images folder, also set their id and event handler 
+    
     for (var i = 1; i <= NUM_BALLS; i++){
         var newImg = document.createElement("img");
-        //...
+        
         $(newImg).attr("id", "shadow" + i)
-        //...
+      
         $(newImg).attr("src", "./images/shadow_ball_" + i + ".png");
-        //...
-		//...
-		//...
-        // set onclick event handler and pass event.data.id as a parameter
+        // onclick event handler and pass event.data.id as a parameter
         $(newImg).click({id: i}, select_peg); 
         $("#pegselection").append(newImg);
     }
     
 }
 
-/* 
- * Initiate the game board
- * Reset all the holds
- * Reset the btn position and its visibility
- * Send a "generate code" request to the server
- */
+
 function initGameBoard(){
     //reset holds
     for (var i = NUM_ATTEMPTS; i > 0; i--){
@@ -148,7 +118,7 @@ function initGameBoard(){
             $("#attempt" + i + "_" + j).attr("src", "./images/hole.png");
             $("#attempt" + i + "_" + j).css({'opacity' : 0.3});
         }
-        //reset the "attempt#result" to empty
+        
         $("#attempt" + i + "result").empty();
     }
     
@@ -170,16 +140,13 @@ function initGameBoard(){
     
 }
 
-/* 
- * Activate an attempt
- * @param id is the attempt id to be activated
- */
+
 function activateAttempt(id){
-    //remove onclick event for all holes
+    
     $(".imgAttempt").off("click");
     
     //reset the visibility of the current attempt, 
-    //and add onclick event to the holes in this attempt
+    //onclick event to the holes in this attempt
     for (var i = 1; i <= CODE_LENGTH; i++){
         $("#attempt"+id+"_"+i).css({'opacity' : 1});
         $("#attempt"+id+"_"+i).click({id: i}, process_hole);
@@ -213,7 +180,7 @@ function process_hole(event){
 function process_attempt(){
     //console.dir("this is processing attempt");
     if (!attempt_code.includes(0)){
-        //move the button up and display the result
+        
         var step = parseInt($(".attempt").css("margin-top")) 
         + parseInt($(".attempt").css("height"));
         
